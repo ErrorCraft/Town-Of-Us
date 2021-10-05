@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <Version>2.2.1</Version>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
@@ -12,11 +13,15 @@
   
   <ItemGroup>
     <PackageReference Include="Reactor" Version="1.0.0-rc.1" />
-    <PackageReference Include="Reactor.MSBuild" Version="0.1.5" />
+    <PackageReference Include="Reactor.MSBuild" Version="0.1.5" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\*" />
     <EmbeddedResource Include="Resources\Hats\**" />
   </ItemGroup>
+
+  <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" Condition="'$(Configuration)' == 'Debug'" />
+  </Target>
 </Project>
